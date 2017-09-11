@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <title>test</title>
+
+    <script id='sap-ui-bootstrap' type='text/javascript'
+        src='http://vesapui5.dhcp.wdf.sap.corp:8080/sapui5-1.26/resources/sap-ui-core.js'
+        data-sap-ui-theme='sap_goldreflection'
+        data-sap-ui-libs='sap.ui.commons,sap.ui.ux3,sap.viz'></script>
+
+    <style>
+        body, html, #content {
+            border: 0;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+            
+        #leftCell {
+            background-color: yellow;
+        }
+        #topCell {
+            background-color: pink;
+        }
+        #centerCell {
+            background-color: grey;
+        }
+        
+    </style>
+
+<script>
+  var singleTon = (function (){
+    var _singleTon; 
+
+    return function(){
+      if(!_singleTon){
+         _singleTon = new SingleTonClass();
+      }
+      return _singleTon;
+    }
+
+    function SingleTonClass(){
+      //single tone class
+    }
+  })();
+</script>
+<script>
+	var consts = {
+		location: "LOCATION",
+		time: "TIME",
+		resource:"RESOURCE",
+		idleRate:"IDLE RATE"
+	};
+
+	main();
+	function main(){
+		var oChart = initBarChart();
+		oChart.placeAt("sample1");
+	}
+	function setModel(oChart){
+		var model = new sap.ui.model.json.JSONModel( getData() );
+		oChart.setModel(model);
+	}
+	function initBarChart(){
+		var barChart = new sap.viz.ui5.controls.VizFrame({
+			vizType:"bar",
+			width: "100%"
+		})
+
+		addFeedItems(barChart);
+		setDataSet(barChart);
+		setModel(barChart);
+
+		return barChart;
+	};
+	function addFeedItems(chart){
+		var aDimensionValues = [consts.location, consts.time,consts.resource];
+			chart.addFeed(new sap.viz.ui5.controls.common.feeds.FeedItem({
+				'uid' : "axisLabels",
+				'type' : "Dimension",
+				'values' : aDimensionValues
+			}));
+	
+			chart.addFeed(new sap.viz.ui5.controls.common.feeds.FeedItem({
+				'uid' : "primaryValues",
+				'type' : "Measure",
+				'values' : [consts.idleRate]
+			}));
+
+	}
+	
+	function setDataSet(chart){
+		chart.setDataset( new sap.viz.ui5.data.FlattenedDataset({
+		            dimensions: getDimensions(),
+		            measures: getMeasures(),
+		            data: {
+		                path: "/"
+		            }
+		         }));
+
+		function getDimensions(){
+			var aDimensions = [];
+
+			aDimensions.push({
+			    name:consts.location,
+			    value:"{GEO_NAME}"
+			});
+
+			aDimensions.push({
+			    name:consts.time,
+			    value:"{START_TIME}"
+			});
+		    aDimensions.push({
+		        name:consts.resource,
+		        value:"{RESOURCE_ID}"
+		    });
+
+			return aDimensions;
+		}
+
+		function getMeasures(){
+			return [{
+				name: consts.idleRate,
+				value:"{IDLE_RATE/VALUE}"
+			}]
+		}
+	}
+
+	function getData(){
+		return        [{
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "40RP",
+        "RESOURCE_NAME": "Reefer High Cube Primeline",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "40RP",
+        "RESOURCE_NAME": "Reefer High Cube Primeline",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "40RP",
+        "RESOURCE_NAME": "Reefer High Cube Primeline",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "40HC",
+        "RESOURCE_NAME": "GP ctr W/T vent. 9'6",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "40HC",
+        "RESOURCE_NAME": "GP ctr W/T vent. 9'6",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "40HC",
+        "RESOURCE_NAME": "GP ctr W/T vent. 9'6",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 93.51922837185846
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "20ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "20ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "20ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 92.26929596329366
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "40ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "40ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwjMvG",
+        "GEO_NAME": "CNTXGDTPC",
+        "RESOURCE_ID": "40ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 94.77320053422619
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "20ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 93.20887942328042
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "20ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "20ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "40HC",
+        "RESOURCE_NAME": "GP ctr W/T vent. 9'6",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 96.54017857142857
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "40HC",
+        "RESOURCE_NAME": "GP ctr W/T vent. 9'6",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "40HC",
+        "RESOURCE_NAME": "GP ctr W/T vent. 9'6",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "40RP",
+        "RESOURCE_NAME": "Reefer High Cube Primeline",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 99.58493343568122
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "40RP",
+        "RESOURCE_NAME": "Reefer High Cube Primeline",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "40RP",
+        "RESOURCE_NAME": "Reefer High Cube Primeline",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "40ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 96.06173340542328
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "40ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLvxsvG",
+        "GEO_NAME": "CNDLCDPCM",
+        "RESOURCE_ID": "40ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "40RP",
+        "RESOURCE_NAME": "Reefer High Cube Primeline",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "40RP",
+        "RESOURCE_NAME": "Reefer High Cube Primeline",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "40RP",
+        "RESOURCE_NAME": "Reefer High Cube Primeline",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 91.70238095238095
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "40ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "40ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "40ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 89.60575458250662
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "20ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "20ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "20ST",
+        "RESOURCE_NAME": "General Purpose cntr W/T vent",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 88.36262180208334
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "40HC",
+        "RESOURCE_NAME": "GP ctr W/T vent. 9'6",
+        "START_TIME": "2015-01-26T16:00:00.000Z",
+        "END_TIME": "2015-01-27T11:25:19.848Z",
+        "SEQUENCE": 3,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "40HC",
+        "RESOURCE_NAME": "GP ctr W/T vent. 9'6",
+        "START_TIME": "2015-01-19T16:00:00.000Z",
+        "END_TIME": "2015-01-26T16:00:00.000Z",
+        "SEQUENCE": 2,
+        "IDLE_RATE": {
+          "VALUE": 100
+        }
+      },
+      {
+        "GEO_ID": "RAwBT8cq7jIXpPfsLwiMvG",
+        "GEO_NAME": "CNTXGDTEC",
+        "RESOURCE_ID": "40HC",
+        "RESOURCE_NAME": "GP ctr W/T vent. 9'6",
+        "START_TIME": "2015-01-12T16:00:00.000Z",
+        "END_TIME": "2015-01-19T16:00:00.000Z",
+        "SEQUENCE": 1,
+        "IDLE_RATE": {
+          "VALUE": 88.8637037037037
+        }
+      }
+    ]
+	};
+	
+</script>
+
+</head>
+<body class='sapUiBody'>
+    <div id='sample1'></div>
+	<div id='sample2'></div>
+</body>
+</html>
